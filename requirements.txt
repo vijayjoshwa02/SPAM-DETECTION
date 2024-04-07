@@ -1,5 +1,4 @@
 flask
 pandas
-csv
 sklearn.feature_extraction.text
 sklearn.naive_bayes 
