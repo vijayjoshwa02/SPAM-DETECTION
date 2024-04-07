@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <style type="text/css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 28px;
+            background-image: url("{{ url_for('static', filename='bg2.jpeg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .cover-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ url_for('static', filename='bg1.jpeg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: transform 1.0s ease-in-out;
+          }
+        .main-page {
+            opacity: 0; /* Initially hidden */
+            justify-content: center;
+            transition: opacity 0.8s ease-in-out; /* Fade-in animation */
+          }
+        .main-page.active {
+            opacity: 1; /* Make the main page visible */ /* Change this to your desired background color after transition */
+          }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+            position: relative;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"], input[type="password"], input[type="email"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .su{
+            font-size: 19px;
+            text-decoration: none;
+        }
+        a{
+        color: #00219f;
+
+        }
+        a:hover{
+            color: #3b63fd;
+
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 10px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .error {
+            color: #ff0000;
+        }
+
+        .success {
+            color: #00cc00;
+        }
+
+        .back-arrow {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            color: black;
+        }
+
+        .back-arrow:hover {
+            color: #000000b5;
+        }
+    </style>
+    <div class="cover-page">
+        <h1>SPAM MESSAGE DETECTOR</h1>
+    </div>
+    <div class="main-page">
+    <div class="container">
+        <div class="back-arrow" onclick="goBack()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path fill="currentColor" d="M20 11H7.41l5.3-5.29L12 4l-8 8 8 8 1.41-1.41L7.41 13H20v-2z"/></svg>
+        </div>
+        <h2>Login</h2>
+        <form id="loginForm" tyle="display: block;" onsubmit="login(event)">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <input type="submit" value="Login">
+            <p class="su" >New user? <a class="su" href="#" onclick="showSignUpForm()">Sign up</a></p>
+            <p class="message"></p>
+        </form>
+        <form id="signupForm" style="display: none;" onsubmit="signup(event)">
+            <input type="text" name="fullname" placeholder="Full Name" required><br>
+            <input type="email" name="email" placeholder="Email" required><br>
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <input type="submit" value="Sign Up">
+            <p class="message"></p>
+        </form>
+        <div class="back-arrow" onclick="showLoginForm()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path fill="currentColor" d="M20 11H7.41l5.3-5.29L12 4l-8 8 8 8 1.41-1.41L7.41 13H20v-2z"/></svg>
+        </div>
+        </div>
+    </div>
+
+<script>
+        function slideUpCoverPage() {
+            var coverPage = document.querySelector('.cover-page');
+            var mainPage = document.querySelector('.main-page');
+            
+            // Slide up animation for cover page
+            coverPage.style.transform = 'translateY(-100%)';
+            coverPage.addEventListener('transitionend', function() {
+                coverPage.style.display = 'none'; // Hide the cover page after sliding up
+                mainPage.classList.add('active'); // Make the main page visible with opacity transition
+            }, {once: true});
+        }
+
+        // Automatically slide up the cover page after 1 second (adjust as needed)
+        setTimeout(slideUpCoverPage, 1000);
+
+    function showSignUpForm() {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("signupForm").style.display = "block";
+            document.querySelector("h2").innerText = 'Sign up';
+            document.querySelector(".message").innerText = '';
+    }
+
+    function showLoginForm() {
+            document.getElementById("signupForm").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+            document.querySelector("h2").innerText = 'Login';
+            document.querySelector(".message").innerText = '';
+    }
+
+    function goBack() {
+            document.getElementById("message").innerText = '';
+            document.getElementById("signupForm").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+            document.querySelector("h2").innerText = 'Login';
+            document.querySelector(".message").innerText = '';
+    }
+
+    function login(event) {
+        event.preventDefault(); // Prevent form submission
+        var formData = $('#loginForm').serialize();
+        $.ajax({
+            type: 'POST',
+            url: '/login',
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.redirect_url;
+                } else {
+                    $('.message').html('Invalid username or password.');
+                }
+            },
+            error: function(xhr, status, error) {
+                var errorMessage = xhr.responseJSON.error;
+                $('.message').html(errorMessage);
+            }
+        });
+    }
+
+    function signup(event) {
+        event.preventDefault(); // Prevent form submission
+        var formData = $('#signupForm').serialize();
+        $.ajax({
+            type: 'POST',
+            url: '/signup',
+            data: formData,
+            success: function(response) {
+                $('.message').html(response.message);
+            },
+            error: function(xhr, status, error) {
+                var errorMessage = xhr.responseJSON.error;
+                $('.message').html(errorMessage);
+            }
+        });
+    }
+</script>
+</body>
+</html>
