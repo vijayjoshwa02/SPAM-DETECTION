@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spam Detector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("{{ url_for('static', filename='bg2.jpeg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: block;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            width: 300px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spam Detector</h1><br>
+    <form action="/detect_spam" method="post" onsubmit="detect();" >
+        <input type="text" name="text" placeholder="Enter text for spam detection">
+        <button type="submit">Check for Spam</button>
+    </form>
+
+    <script>
+        function detect() {
+            var pred = {{ prediction }};
+            var txt = "{{ text }}"; 
+            if (txt !== '') {
+                if (pred === 1) {
+                    alert("The message '" + txt + "' is spam");
+                } else {
+                    alert("The message '" + txt + "' is not spam");
+                }
+            } else {
+                alert("Enter some message to detect");
+            }
+        }
+    </script>
+</body>
+</html>
